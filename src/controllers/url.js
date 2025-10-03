@@ -14,9 +14,10 @@ exports.createUrl = tryCatch(async (req, res, next) => {
         shortId,
         longUrl,
         visitHistory: [],
+        user: req.user._id
     });
 
-    res.status(201).json({ success: true, shortId: newUrl.shortId, shortUrl: `${req.protocol}://${req.get('host')}/url/fetch/${shortId}` });
+    return res.redirect('/');
 });
 
 exports.redirectUrl = tryCatch(async (req, res, next) => {

@@ -6,9 +6,12 @@ const errorHandler = require('./middlewares/error');
 const staticRoutes = require('./routes/staticRoutes');
 const urlRoutes = require('./routes/url');
 const userRoutes = require('./routes/user');
+const cookieParser = require('cookie-parser');
+const { authorization, authentication } = require('./middlewares/auth');
 const app = express();
 
 mongoDBConnect(config.mongoUri);
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -17,7 +20,7 @@ app.set('views', path.resolve('./src/views'));
 
 
 app.use('/', staticRoutes);
-app.use('/url', urlRoutes);
+app.use('/url', authentication, authorization('user'), urlRoutes);
 app.use('/user', userRoutes);
 
 app.use(errorHandler);
